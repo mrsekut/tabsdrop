@@ -15,7 +15,7 @@ export default function Options() {
         fontFamily: 'Arial, sans-serif',
       }}
     >
-      <h3>Pocket認証情報の設定</h3>
+      <h3>Set Pocket Credentials</h3>
 
       <div style={{ marginBottom: '10px' }}>
         <Field
@@ -37,15 +37,15 @@ export default function Options() {
       )}
 
       <div style={{ marginTop: '10px', fontSize: '12px', color: '#555' }}>
-        Pocketの認証情報は&nbsp;
+        You can obtain your Pocket credentials from&nbsp;
         <a
           href="https://getpocket.com/developer/"
           target="_blank"
           rel="noopener noreferrer"
         >
-          こちら
+          here
         </a>
-        &nbsp;から取得してください。
+        .
       </div>
     </div>
   );
@@ -77,9 +77,9 @@ function Field({ label, value, onChange }: Props) {
 
 function useDebouncedAutoSaveStatus(
   deps: any[],
-  debounceDelay = 200, // 入力が止まってからの待ち時間（例: 1秒）
-  displayDuration = 1000, // 表示期間（例: 1秒）
-  message = '保存しました。',
+  debounceDelay = 200, // Delay after input stops before displaying message (e.g., 200ms)
+  displayDuration = 1000, // Duration the message is displayed (e.g., 1s)
+  message = 'Saved successfully.',
 ) {
   const [status, setStatus] = useState('');
   const [isInitial, setIsInitial] = useState(true);
