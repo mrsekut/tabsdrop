@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { saveItems } from './features/Pocket';
 import { usePocketAccessToken } from './features/Pocket/usePocketAccessToken';
@@ -25,22 +25,26 @@ function NotAuthorized() {
 }
 
 function PocketTabSaver() {
-  const [targetTabs, setTargetTabs] = useState<TabInfo[]>([]);
+  const tabs = useTabs();
+  const [hasRun, setHasRun] = useState(false);
+  const [results, setResults] = useState<{ id: number; success: boolean }[]>(
+    [],
+  );
 
   const { consumerKey } = usePocketConsumerKey();
   const { accessToken } = usePocketAccessToken();
 
   const handleSaveAll = async () => {
-    const tabs = await selectedTabs();
     const result = await saveItems(tabs, consumerKey, accessToken);
+    setResults(result.map(r => ({ id: r.item.id, success: r.success })));
   };
 
   useEffect(() => {
-    (async () => {
-      const tabs = await selectedTabs();
-      setTargetTabs(tabs);
-    })();
-  }, []);
+    if (!hasRun && consumerKey && accessToken) {
+      setHasRun(true);
+      handleSaveAll();
+    }
+  }, [consumerKey, accessToken, hasRun]);
 
   return (
     <div
@@ -50,27 +54,60 @@ function PocketTabSaver() {
         fontFamily: 'Arial, sans-serif',
       }}
     >
-      {/* <h3>Pocketにタブを保存</h3>
-      <pre
-        style={{ whiteSpace: 'pre-wrap', marginTop: '10px', fontSize: '14px' }}
-      >
-        {status}
-      </pre> */}
-      {/* <div style={{ marginTop: '10px', fontSize: '12px', color: '#555' }}>
-        ※ 認証情報が未設定の場合はオプションページから設定してください。
-      </div> */}
-      {/* <hr /> */}
-      {/* TODO: 仮 */}
-      <button onClick={handleSaveAll}>save</button>
+      {results.length === 0 ? (
+        <h3>Saving tabs to Pocket...</h3>
+      ) : (
+        <h3>Saved!!</h3>
+      )}
 
       <ul>
-        {targetTabs.map(tab => (
-          <li key={tab.id}>{tab.title}</li>
-        ))}
+        {tabs.map(tab => {
+          const result = results.find(r => r.id === tab.id);
+          return (
+            <ListItem
+              key={tab.id}
+              tab={tab}
+              status={result ? (result.success ? 'saved' : 'error') : 'saving'}
+            />
+          );
+        })}
       </ul>
     </div>
   );
 }
+
+const ListItem: React.FC<{
+  status: 'saving' | 'saved' | 'error';
+  tab: TabInfo;
+}> = ({ status, tab }) => {
+  const icon = useMemo(() => {
+    switch (status) {
+      case 'saving':
+        return '⏳';
+      case 'saved':
+        return '✅️';
+      case 'error':
+        return '❌️';
+    }
+  }, [status]);
+
+  return (
+    <li style={{ listStyle: 'none' }}>
+      {icon} {tab.title}
+    </li>
+  );
+};
+
+const useTabs = () => {
+  const [tabs, setTabs] = useState<TabInfo[]>([]);
+  useEffect(() => {
+    (async () => {
+      const tabs = await selectedTabs();
+      setTabs(tabs);
+    })();
+  }, []);
+  return tabs;
+};
 
 type TabInfo = {
   id: number;
