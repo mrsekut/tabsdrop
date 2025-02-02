@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react"
-import { useStorage } from "@plasmohq/storage/hook"
+import { usePocketConsumerKey } from "~features/Pocket/usePocketCunsumerKey"
+import { usePocketAccessToken } from "~features/Pocket/usePocketAccessToken"
 
 export default function Options() {
   const { consumerKey, setConsumerKey } = usePocketConsumerKey()
@@ -52,16 +53,6 @@ function Field({ label, value, onChange }: Props) {
       />
     </div>
   )
-}
-
-const usePocketConsumerKey = () => {
-  const [consumerKey, setConsumerKey] = useStorage("consumerKey", "")
-  return { consumerKey, setConsumerKey }
-}
-
-const usePocketAccessToken = () => {
-  const [accessToken, setAccessToken] = useStorage("accessToken", "")
-  return { accessToken, setAccessToken }
 }
 
 function useDebouncedAutoSaveStatus(
