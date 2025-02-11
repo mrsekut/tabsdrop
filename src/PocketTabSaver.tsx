@@ -1,30 +1,28 @@
-import { useAtomValue } from 'jotai';
+import { useAtomValue, useSetAtom } from 'jotai';
 import { useState, useEffect, useMemo } from 'react';
-import { saveItem } from '~features/Pocket';
 import { usePocketAccessToken } from '~features/Pocket/usePocketAccessToken';
 import { usePocketConsumerKey } from '~features/Pocket/usePocketCunsumerKey';
-import { selectedTabsAtom, type Tab } from '~features/tabs';
+import {
+  tabIdsAtom,
+  saveItemAtom,
+  tabStatusAtom,
+  tabAtom,
+  useInitializeSelectedTabs,
+  type TabId,
+} from '~features/tabs';
 
 export function PocketTabSaver() {
-  const tabs = useAtomValue(selectedTabsAtom);
+  useInitializeSelectedTabs();
+
+  const tabIds = useAtomValue(tabIdsAtom);
+  const saveItem = useSetAtom(saveItemAtom);
   const [hasRun, setHasRun] = useState(false);
-  const [results, setResults] = useState<{ id: number; success: boolean }[]>(
-    [],
-  );
 
   const { consumerKey } = usePocketConsumerKey();
   const { accessToken } = usePocketAccessToken();
 
   const handleSaveAll = async () => {
-    for (const tab of tabs) {
-      const result = await saveItem(
-        tab.title,
-        tab.url,
-        consumerKey,
-        accessToken,
-      );
-      setResults(p => [...p, { id: tab.id, success: result }]);
-    }
+    Promise.all(tabIds.map(id => saveItem(id, consumerKey, accessToken)));
   };
 
   useEffect(() => {
@@ -42,32 +40,21 @@ export function PocketTabSaver() {
         fontFamily: 'Arial, sans-serif',
       }}
     >
-      {results.length === 0 ? (
-        <h3>Saving tabs to Pocket...</h3>
-      ) : (
-        <h3>Saved!!</h3>
-      )}
+      <h3>Saving tabs to Pocket...</h3>
 
       <ul>
-        {tabs.map(tab => {
-          const result = results.find(r => r.id === tab.id);
-          return (
-            <ListItem
-              key={tab.id}
-              tab={tab}
-              status={result ? (result.success ? 'saved' : 'error') : 'saving'}
-            />
-          );
-        })}
+        {tabIds.map(tabId => (
+          <ListItem key={tabId} tabId={tabId} />
+        ))}
       </ul>
     </div>
   );
 }
 
-const ListItem: React.FC<{
-  status: 'saving' | 'saved' | 'error';
-  tab: Tab;
-}> = ({ status, tab }) => {
+const ListItem: React.FC<{ tabId: TabId }> = ({ tabId }) => {
+  const tab = useAtomValue(tabAtom(tabId));
+  const status = useAtomValue(tabStatusAtom(tabId));
+
   const icon = useMemo(() => {
     switch (status) {
       case 'saving':
@@ -76,8 +63,12 @@ const ListItem: React.FC<{
         return '✅️';
       case 'error':
         return '❌️';
+      case null:
+        return '';
     }
   }, [status]);
+
+  if (tab == null) return null;
 
   return (
     <li style={{ listStyle: 'none' }}>
