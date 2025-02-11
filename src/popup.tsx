@@ -3,6 +3,8 @@ import { useEffect, useMemo, useState } from 'react';
 import { saveItem } from './features/Pocket';
 import { usePocketAccessToken } from './features/Pocket/usePocketAccessToken';
 import { usePocketConsumerKey } from './features/Pocket/usePocketCunsumerKey';
+import { useAtomValue } from 'jotai';
+import { selectedTabsAtom, type Tab } from './features/tabs';
 
 export default function Popup() {
   const { consumerKey } = usePocketConsumerKey();
@@ -25,7 +27,7 @@ function NotAuthorized() {
 }
 
 function PocketTabSaver() {
-  const tabs = useTabs();
+  const tabs = useAtomValue(selectedTabsAtom);
   const [hasRun, setHasRun] = useState(false);
   const [results, setResults] = useState<{ id: number; success: boolean }[]>(
     [],
@@ -85,7 +87,7 @@ function PocketTabSaver() {
 
 const ListItem: React.FC<{
   status: 'saving' | 'saved' | 'error';
-  tab: TabInfo;
+  tab: Tab;
 }> = ({ status, tab }) => {
   const icon = useMemo(() => {
     switch (status) {
@@ -103,31 +105,4 @@ const ListItem: React.FC<{
       {icon} {tab.title}
     </li>
   );
-};
-
-const useTabs = () => {
-  const [tabs, setTabs] = useState<TabInfo[]>([]);
-  useEffect(() => {
-    (async () => {
-      const tabs = await selectedTabs();
-      setTabs(tabs);
-    })();
-  }, []);
-  return tabs;
-};
-
-type TabInfo = {
-  id: number;
-  title: string;
-  url: string;
-};
-
-const selectedTabs = async (): Promise<TabInfo[]> => {
-  const tabs = await chrome.tabs.query({
-    currentWindow: true,
-    highlighted: true,
-  });
-  return tabs
-    .filter(t => t.id != null && t.title != null && t.url != null)
-    .map(t => ({ id: t.id, title: t.title, url: t.url })) as TabInfo[];
 };
