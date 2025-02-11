@@ -37,12 +37,11 @@ export function PocketTabSaver() {
       style={{
         padding: '16px',
         width: '300px',
-        fontFamily: 'Arial, sans-serif',
       }}
     >
       <h3>Saving tabs to Pocket...</h3>
 
-      <ul>
+      <ul style={{ paddingInlineStart: '0' }}>
         {tabIds.map(tabId => (
           <ListItem key={tabId} tabId={tabId} />
         ))}
@@ -71,7 +70,15 @@ const ListItem: React.FC<{ tabId: TabId }> = ({ tabId }) => {
   if (tab == null) return null;
 
   return (
-    <li style={{ listStyle: 'none' }}>
+    <li
+      style={{
+        listStyle: 'none',
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+      }}
+      title={tab.title}
+    >
       {icon} {tab.title}
     </li>
   );
