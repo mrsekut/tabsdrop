@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 
-import { saveItems } from './features/Pocket';
+import { saveItem } from './features/Pocket';
 import { usePocketAccessToken } from './features/Pocket/usePocketAccessToken';
 import { usePocketConsumerKey } from './features/Pocket/usePocketCunsumerKey';
 
@@ -35,8 +35,15 @@ function PocketTabSaver() {
   const { accessToken } = usePocketAccessToken();
 
   const handleSaveAll = async () => {
-    const result = await saveItems(tabs, consumerKey, accessToken);
-    setResults(result.map(r => ({ id: r.item.id, success: r.success })));
+    for (const tab of tabs) {
+      const result = await saveItem(
+        tab.title,
+        tab.url,
+        consumerKey,
+        accessToken,
+      );
+      setResults(p => [...p, { id: tab.id, success: result }]);
+    }
   };
 
   useEffect(() => {
