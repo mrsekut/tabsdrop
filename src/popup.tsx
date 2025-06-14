@@ -1,22 +1,43 @@
-import { usePocketAccessToken } from './features/Pocket/usePocketAccessToken';
-import { usePocketConsumerKey } from './features/Pocket/usePocketCunsumerKey';
+import { useState, useEffect } from 'react';
+import { isAuthenticated } from './features/Raindrop/auth';
 import { PocketTabSaver } from './PocketTabSaver';
 
 export default function Popup() {
-  const { consumerKey } = usePocketConsumerKey();
-  const { accessToken } = usePocketAccessToken();
+  const [isAuth, setIsAuth] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  if (!consumerKey || !accessToken) {
+  useEffect(() => {
+    const checkAuth = async () => {
+      const authenticated = await isAuthenticated();
+      setIsAuth(authenticated);
+      setLoading(false);
+    };
+    checkAuth();
+  }, []);
+
+  if (loading) {
+    return <Loading />;
+  }
+
+  if (!isAuth) {
     return <NotAuthorized />;
   }
 
   return <PocketTabSaver />;
 }
 
+function Loading() {
+  return (
+    <div style={{ padding: '16px', fontSize: '14px', color: '#555' }}>
+      認証状況を確認中...
+    </div>
+  );
+}
+
 function NotAuthorized() {
   return (
-    <div style={{ marginTop: '10px', fontSize: '12px', color: '#555' }}>
-      Pocket authentication information is not set. Please configure it on the
+    <div style={{ padding: '16px', fontSize: '14px', color: '#555' }}>
+      Raindrop authentication information is not set. Please configure it on the
       options page.
     </div>
   );
