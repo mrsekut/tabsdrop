@@ -1,7 +1,7 @@
 import { useAtomValue, useSetAtom } from 'jotai';
 import { useState, useEffect, useMemo } from 'react';
-import { usePocketAccessToken } from '~features/Pocket/usePocketAccessToken';
-import { usePocketConsumerKey } from '~features/Pocket/usePocketCunsumerKey';
+import { useRaindropAuth } from '~features/Raindrop/useRaindropAccessToken';
+import { isAuthenticated } from '~features/Raindrop/auth';
 import {
   tabIdsAtom,
   saveItemAtom,
@@ -17,20 +17,44 @@ export function PocketTabSaver() {
   const tabIds = useAtomValue(tabIdsAtom);
   const saveItem = useSetAtom(saveItemAtom);
   const [hasRun, setHasRun] = useState(false);
+  const [authChecked, setAuthChecked] = useState(false);
+  const [isAuth, setIsAuth] = useState(false);
 
-  const { consumerKey } = usePocketConsumerKey();
-  const { accessToken } = usePocketAccessToken();
+  useEffect(() => {
+    const checkAuth = async () => {
+      const authenticated = await isAuthenticated();
+      setIsAuth(authenticated);
+      setAuthChecked(true);
+    };
+    checkAuth();
+  }, []);
 
   const handleSaveAll = async () => {
-    Promise.all(tabIds.map(id => saveItem(id, consumerKey, accessToken)));
+    Promise.all(tabIds.map(id => saveItem(id)));
   };
 
   useEffect(() => {
-    if (!hasRun && consumerKey && accessToken) {
+    if (!hasRun && authChecked && isAuth) {
       setHasRun(true);
       handleSaveAll();
     }
-  }, [consumerKey, accessToken, hasRun]);
+  }, [isAuth, authChecked, hasRun]);
+
+  if (!authChecked) {
+    return (
+      <div style={{ padding: '16px', width: '300px' }}>
+        <p>認証状況を確認中...</p>
+      </div>
+    );
+  }
+
+  if (!isAuth) {
+    return (
+      <div style={{ padding: '16px', width: '300px' }}>
+        <p>Raindrop authentication information is not set. Please configure it on the options page.</p>
+      </div>
+    );
+  }
 
   return (
     <div
@@ -39,7 +63,7 @@ export function PocketTabSaver() {
         width: '300px',
       }}
     >
-      <h3>Saving tabs to Pocket...</h3>
+      <h3>Saving tabs to Raindrop...</h3>
 
       <ul style={{ paddingInlineStart: '0' }}>
         {tabIds.map(tabId => (
