@@ -1,9 +1,6 @@
 import { useState } from 'react';
 import { useRaindropAuth } from '~features/Raindrop/useRaindropAccessToken';
 import { authenticateWithRaindrop, logout } from '~features/Raindrop/auth';
-import { RAINDROP_CONFIG } from '~features/Raindrop/config';
-
-const { CLIENT_ID } = RAINDROP_CONFIG;
 
 export default function Options() {
   const { isAuthenticated, loading, refresh } = useRaindropAuth();
@@ -104,31 +101,6 @@ export default function Options() {
           {authError && (
             <p style={{ color: '#f44336', marginTop: '12px' }}>{authError}</p>
           )}
-
-          {CLIENT_ID === 'YOUR_CLIENT_ID' && (
-            <div
-              style={{
-                marginTop: '12px',
-                padding: '12px',
-                backgroundColor: '#fff3cd',
-                borderRadius: '4px',
-                fontSize: '12px',
-              }}
-            >
-              <strong>初回設定が必要です:</strong>
-              <ol
-                style={{
-                  marginTop: '8px',
-                  marginBottom: 0,
-                  paddingLeft: '20px',
-                }}
-              >
-                <li>.env.localファイルを作成</li>
-                <li>RaindropのClient IDとSecretを設定</li>
-                <li>npm run devで再起動</li>
-              </ol>
-            </div>
-          )}
         </div>
       )}
 
@@ -136,7 +108,7 @@ export default function Options() {
         <p>注意事項:</p>
         <ul style={{ marginTop: '8px', paddingLeft: '20px' }}>
           <li>この拡張機能はRaindrop.ioの公式アプリではありません</li>
-          <li>連携を解除すると、保存済みのアイテムは削除されません</li>
+          <li>連携を解除しても、保存済みのアイテムは削除されません</li>
         </ul>
       </div>
     </div>
