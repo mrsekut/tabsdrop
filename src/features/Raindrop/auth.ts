@@ -9,18 +9,18 @@ const CLIENT_SECRET = RAINDROP_CONFIG.CLIENT_SECRET;
 // Use the standard Chrome extension redirect URL
 const REDIRECT_URL = chrome.identity.getRedirectURL();
 
-interface TokenResponse {
+type TokenResponse = {
   access_token: string;
   refresh_token: string;
   expires_in: number;
   token_type: string;
-}
+};
 
-interface StoredToken {
+type StoredToken = {
   accessToken: string;
   refreshToken: string;
   expiresAt: number;
-}
+};
 
 export async function authenticateWithRaindrop(): Promise<boolean> {
   try {
@@ -120,7 +120,7 @@ export async function authenticateWithRaindrop(): Promise<boolean> {
   }
 }
 
-export async function refreshAccessToken(): Promise<string | null> {
+async function refreshAccessToken(): Promise<string | null> {
   try {
     const storedToken = await getStoredToken();
     if (!storedToken?.refreshToken) {
@@ -181,7 +181,8 @@ async function saveTokens(token: StoredToken): Promise<void> {
 }
 
 async function getStoredToken(): Promise<StoredToken | null> {
-  return await storage.get<StoredToken>('raindropToken');
+  const token = await storage.get<StoredToken>('raindropToken');
+  return token ?? null;
 }
 
 export async function logout(): Promise<void> {

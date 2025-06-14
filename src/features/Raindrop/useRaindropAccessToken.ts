@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getValidAccessToken, isAuthenticated } from './auth';
+import { isAuthenticated } from './auth';
 
 export const useRaindropAuth = () => {
   const [isAuth, setIsAuth] = useState(false);
@@ -17,17 +17,4 @@ export const useRaindropAuth = () => {
   };
 
   return { isAuthenticated: isAuth, loading, refresh: checkAuthStatus };
-};
-
-// Keep for backward compatibility, but now returns valid token
-export const useRaindropAccessToken = () => {
-  const [accessToken, setAccessToken] = useState('');
-
-  useEffect(() => {
-    getValidAccessToken().then(token => {
-      if (token) setAccessToken(token);
-    });
-  }, []);
-
-  return { accessToken, setAccessToken: () => {} };
 };
