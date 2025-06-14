@@ -26,7 +26,9 @@ export async function authenticateWithRaindrop(): Promise<boolean> {
   try {
     // Check if CLIENT_ID is properly configured
     if (CLIENT_ID === 'YOUR_CLIENT_ID' || !CLIENT_ID) {
-      console.error('Raindrop CLIENT_ID is not configured. Please set up your .env.local file.');
+      console.error(
+        'Raindrop CLIENT_ID is not configured. Please set up your .env.local file.',
+      );
       throw new Error('CLIENT_ID not configured');
     }
 
@@ -68,19 +70,22 @@ export async function authenticateWithRaindrop(): Promise<boolean> {
     }
 
     // Step 3: Exchange code for access token
-    const tokenResponse = await fetch('https://raindrop.io/oauth/access_token', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
+    const tokenResponse = await fetch(
+      'https://raindrop.io/oauth/access_token',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          grant_type: 'authorization_code',
+          code,
+          client_id: CLIENT_ID,
+          client_secret: CLIENT_SECRET,
+          redirect_uri: REDIRECT_URL,
+        }),
       },
-      body: JSON.stringify({
-        grant_type: 'authorization_code',
-        code,
-        client_id: CLIENT_ID,
-        client_secret: CLIENT_SECRET,
-        redirect_uri: REDIRECT_URL,
-      }),
-    });
+    );
 
     const responseText = await tokenResponse.text();
 
@@ -89,7 +94,7 @@ export async function authenticateWithRaindrop(): Promise<boolean> {
     }
 
     const tokenData = JSON.parse(responseText);
-    
+
     // Check if Raindrop returned an error in successful HTTP response
     if (!tokenData.result && tokenData.errorMessage) {
       throw new Error(`Raindrop API error: ${tokenData.errorMessage}`);
