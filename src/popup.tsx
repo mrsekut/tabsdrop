@@ -35,10 +35,35 @@ function Loading() {
 }
 
 function NotAuthorized() {
+  const openOptionsPage = () => {
+    chrome.runtime.openOptionsPage();
+  };
+
   return (
-    <div style={{ padding: '16px', fontSize: '14px', color: '#555' }}>
-      Raindrop authentication information is not set. Please configure it on the
-      options page.
+    <div style={{ padding: '16px', width: '280px' }}>
+      <div style={{ marginBottom: '12px', fontSize: '14px', color: '#555' }}>
+        Raindrop.ioとの連携が必要です
+      </div>
+
+      <button
+        onClick={openOptionsPage}
+        style={{
+          padding: '8px 16px',
+          backgroundColor: '#4CAF50',
+          color: 'white',
+          border: 'none',
+          borderRadius: '4px',
+          cursor: 'pointer',
+          fontSize: '14px',
+          fontWeight: 'bold',
+        }}
+      >
+        設定ページを開く
+      </button>
+
+      <div style={{ marginTop: '8px', fontSize: '12px', color: '#888' }}>
+        設定ページで「Raindrop.ioと連携」をクリックしてください
+      </div>
     </div>
   );
 }

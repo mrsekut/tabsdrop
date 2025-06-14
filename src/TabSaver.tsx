@@ -50,9 +50,8 @@ export function TabSaver() {
   if (!isAuth) {
     return (
       <div style={{ padding: '16px', width: '300px' }}>
-        <p>
-          Raindrop authentication information is not set. Please configure it on
-          the options page.
+        <p style={{ fontSize: '14px', color: '#f44336' }}>
+          認証エラーが発生しました。設定ページで再度連携してください。
         </p>
       </div>
     );
