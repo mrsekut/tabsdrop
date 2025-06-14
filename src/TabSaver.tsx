@@ -10,7 +10,7 @@ import {
   type TabId,
 } from '~features/tabs';
 
-export function PocketTabSaver() {
+export function TabSaver() {
   useInitializeSelectedTabs();
 
   const tabIds = useAtomValue(tabIdsAtom);

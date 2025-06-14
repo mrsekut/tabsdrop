@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { isAuthenticated } from './features/Raindrop/auth';
-import { PocketTabSaver } from './PocketTabSaver';
+import { TabSaver } from './TabSaver';
 
 export default function Popup() {
   const [isAuth, setIsAuth] = useState(false);
@@ -23,7 +23,7 @@ export default function Popup() {
     return <NotAuthorized />;
   }
 
-  return <PocketTabSaver />;
+  return <TabSaver />;
 }
 
 function Loading() {
