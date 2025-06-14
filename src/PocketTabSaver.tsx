@@ -1,6 +1,5 @@
 import { useAtomValue, useSetAtom } from 'jotai';
 import { useState, useEffect, useMemo } from 'react';
-import { useRaindropAuth } from '~features/Raindrop/useRaindropAccessToken';
 import { isAuthenticated } from '~features/Raindrop/auth';
 import {
   tabIdsAtom,
@@ -51,7 +50,10 @@ export function PocketTabSaver() {
   if (!isAuth) {
     return (
       <div style={{ padding: '16px', width: '300px' }}>
-        <p>Raindrop authentication information is not set. Please configure it on the options page.</p>
+        <p>
+          Raindrop authentication information is not set. Please configure it on
+          the options page.
+        </p>
       </div>
     );
   }

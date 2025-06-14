@@ -1,9 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Storage } from '@plasmohq/storage';
-import { useStorage } from '@plasmohq/storage/hook';
 import { getValidAccessToken, isAuthenticated } from './auth';
-
-const storage = new Storage();
 
 export const useRaindropAuth = () => {
   const [isAuth, setIsAuth] = useState(false);

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useRaindropAuth } from '~features/Raindrop/useRaindropAccessToken';
 import { authenticateWithRaindrop, logout } from '~features/Raindrop/auth';
 import { RAINDROP_CONFIG } from '~features/Raindrop/config';
@@ -106,9 +106,23 @@ export default function Options() {
           )}
 
           {CLIENT_ID === 'YOUR_CLIENT_ID' && (
-            <div style={{ marginTop: '12px', padding: '12px', backgroundColor: '#fff3cd', borderRadius: '4px', fontSize: '12px' }}>
+            <div
+              style={{
+                marginTop: '12px',
+                padding: '12px',
+                backgroundColor: '#fff3cd',
+                borderRadius: '4px',
+                fontSize: '12px',
+              }}
+            >
               <strong>初回設定が必要です:</strong>
-              <ol style={{ marginTop: '8px', marginBottom: 0, paddingLeft: '20px' }}>
+              <ol
+                style={{
+                  marginTop: '8px',
+                  marginBottom: 0,
+                  paddingLeft: '20px',
+                }}
+              >
                 <li>.env.localファイルを作成</li>
                 <li>RaindropのClient IDとSecretを設定</li>
                 <li>npm run devで再起動</li>
