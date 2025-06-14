@@ -30,7 +30,9 @@
       "https://*/*"
     ],
     "permissions": [
-      "tabs"
+      "tabs",
+      "identity",
+      "storage"
     ]
   }
 }
