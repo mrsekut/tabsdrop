@@ -1,7 +1,7 @@
 import { atom, useSetAtom } from 'jotai';
 import { atomFamily } from 'jotai/utils';
 import { useEffect } from 'react';
-import { saveItem } from '~features/Pocket';
+import { saveItem } from '~features/Raindrop';
 
 export type TabId = number;
 export type Tab = {
@@ -46,21 +46,20 @@ export const tabStatusAtom = atomFamily((_id: TabId) =>
   atom<Status | null>(null),
 );
 
-export const saveItemAtom = atom(
-  null,
-  async (get, set, id: TabId, consumerKey: string, accessToken: string) => {
-    const tab = get(tabAtom(id));
-    if (tab == null) return;
+export const saveItemAtom = atom(null, async (get, set, id: TabId) => {
+  const tab = get(tabAtom(id));
+  if (tab == null) return;
 
-    set(tabStatusAtom(id), 'saving');
-    try {
-      await saveItem(tab.title, tab.url, consumerKey, accessToken);
+  set(tabStatusAtom(id), 'saving');
+  try {
+    const success = await saveItem(tab.title, tab.url);
+    if (success) {
       set(tabStatusAtom(id), 'saved');
-    } catch (error) {
-      console.error('Error saving item', error);
+    } else {
       set(tabStatusAtom(id), 'error');
     }
-  },
-);
-
-// delete
+  } catch (error) {
+    console.error('Error saving item', error);
+    set(tabStatusAtom(id), 'error');
+  }
+});
