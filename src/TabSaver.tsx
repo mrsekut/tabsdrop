@@ -42,7 +42,7 @@ export function TabSaver() {
   if (!authChecked) {
     return (
       <div style={{ padding: '16px', width: '300px' }}>
-        <p>認証状況を確認中...</p>
+        <p>Checking authentication status...</p>
       </div>
     );
   }
@@ -51,7 +51,7 @@ export function TabSaver() {
     return (
       <div style={{ padding: '16px', width: '300px' }}>
         <p style={{ fontSize: '14px', color: '#f44336' }}>
-          認証エラーが発生しました。設定ページで再度連携してください。
+          Authentication error occurred. Please reconnect in the settings page.
         </p>
       </div>
     );

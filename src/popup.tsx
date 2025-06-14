@@ -29,7 +29,7 @@ export default function Popup() {
 function Loading() {
   return (
     <div style={{ padding: '16px', fontSize: '14px', color: '#555' }}>
-      認証状況を確認中...
+      Checking authentication status...
     </div>
   );
 }
@@ -42,7 +42,7 @@ function NotAuthorized() {
   return (
     <div style={{ padding: '16px', width: '280px' }}>
       <div style={{ marginBottom: '12px', fontSize: '14px', color: '#555' }}>
-        Raindrop.ioとの連携が必要です
+        Raindrop.io connection required
       </div>
 
       <button
@@ -58,11 +58,11 @@ function NotAuthorized() {
           fontWeight: 'bold',
         }}
       >
-        設定ページを開く
+        Open Settings
       </button>
 
       <div style={{ marginTop: '8px', fontSize: '12px', color: '#888' }}>
-        設定ページで「Raindrop.ioと連携」をクリックしてください
+        Click "Connect to Raindrop.io" in the settings page
       </div>
     </div>
   );

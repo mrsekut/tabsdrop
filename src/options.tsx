@@ -16,7 +16,7 @@ export default function Options() {
     if (success) {
       await refresh();
     } else {
-      setAuthError('認証に失敗しました。もう一度お試しください。');
+      setAuthError('Authentication failed. Please try again.');
     }
 
     setAuthLoading(false);
@@ -30,7 +30,7 @@ export default function Options() {
   if (loading) {
     return (
       <div style={{ padding: '16px', fontFamily: 'Arial, sans-serif' }}>
-        <p>読み込み中...</p>
+        <p>Loading...</p>
       </div>
     );
   }
@@ -43,7 +43,7 @@ export default function Options() {
         fontFamily: 'Arial, sans-serif',
       }}
     >
-      <h2>Raindrop.io 連携設定</h2>
+      <h2>Raindrop.io Connection Settings</h2>
 
       {isAuthenticated ? (
         <div>
@@ -56,7 +56,7 @@ export default function Options() {
             }}
           >
             <p style={{ margin: 0, color: '#2e7d32' }}>
-              ✓ Raindrop.ioと連携済み
+              ✓ Connected to Raindrop.io
             </p>
           </div>
 
@@ -72,13 +72,13 @@ export default function Options() {
               fontSize: '14px',
             }}
           >
-            連携を解除
+            Disconnect
           </button>
         </div>
       ) : (
         <div>
           <p style={{ marginBottom: '16px', color: '#555' }}>
-            Raindrop.ioと連携すると、開いているタブを簡単に保存できます。
+            Connect to Raindrop.io to easily save your open tabs as bookmarks.
           </p>
 
           <button
@@ -95,7 +95,7 @@ export default function Options() {
               fontWeight: 'bold',
             }}
           >
-            {authLoading ? '連携中...' : 'Raindrop.ioと連携'}
+            {authLoading ? 'Connecting...' : 'Connect to Raindrop.io'}
           </button>
 
           {authError && (
@@ -105,10 +105,10 @@ export default function Options() {
       )}
 
       <div style={{ marginTop: '24px', fontSize: '12px', color: '#777' }}>
-        <p>注意事項:</p>
+        <p>Note:</p>
         <ul style={{ marginTop: '8px', paddingLeft: '20px' }}>
-          <li>この拡張機能はRaindrop.ioの公式アプリではありません</li>
-          <li>連携を解除しても、保存済みのアイテムは削除されません</li>
+          <li>This extension is not an official Raindrop.io application</li>
+          <li>Disconnecting will not delete your saved bookmarks</li>
         </ul>
       </div>
     </div>
