@@ -2,8 +2,6 @@ import { checkIfSaved } from '~features/Raindrop';
 
 export {};
 
-console.log('HELLO WORLD FROM BGSCRIPTS');
-
 chrome.tabs.onActivated.addListener(async activeInfo => {
   await updateBadgeForTab(activeInfo.tabId);
 });
