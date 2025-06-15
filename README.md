@@ -1,12 +1,12 @@
-# Upo
+# TabsDrop
 
-[[Japanese](https://scrapbox.io/mrsekut-p/upo)]
+[[Japanese](https://scrapbox.io/mrsekut-p/TabsDrop)]
 
-Chrome extension to use Pocket conveniently.
+Chrome extension to save multiple tabs to Raindrop.io simultaneously.
 
 ## Features
 
-- Save multiple tabs to Pocket
+- Save multiple tabs to Raindrop.io at once
 
 ## Contributing
 

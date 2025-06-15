@@ -1,8 +1,8 @@
 {
-  "name": "upo",
-  "displayName": "Upo",
-  "version": "0.0.1",
-  "description": "A basic Plasmo extension.",
+  "name": "tabsdrop",
+  "displayName": "TabsDrop",
+  "version": "1.0.0",
+  "description": "Save multiple tabs to Raindrop.io simultaneously.",
   "author": "mrsekut",
   "scripts": {
     "dev": "plasmo dev",
