@@ -27,7 +27,8 @@
   },
   "manifest": {
     "host_permissions": [
-      "https://*/*"
+      "https://raindrop.io/*",
+      "https://api.raindrop.io/*"
     ],
     "permissions": [
       "tabs",
