@@ -10,6 +10,16 @@ import {
   type TabId,
 } from '~features/tabs';
 
+// CSS-in-JS for spinner animation
+const spinnerStyle = document.createElement('style');
+spinnerStyle.textContent = `
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+`;
+document.head.appendChild(spinnerStyle);
+
 export function TabSaver() {
   useInitializeSelectedTabs();
 
@@ -61,16 +71,60 @@ export function TabSaver() {
     <div
       style={{
         padding: '16px',
-        width: '300px',
+        width: '320px',
+        backgroundColor: '#ffffff',
+        borderRadius: '8px',
+        boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)',
       }}
     >
-      <h3>Saving tabs to Raindrop...</h3>
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '8px',
+          marginBottom: '16px',
+          padding: '8px 0',
+          borderBottom: '1px solid #e0e0e0',
+        }}
+      >
+        <div
+          style={{
+            width: '20px',
+            height: '20px',
+            backgroundColor: '#4285f4',
+            borderRadius: '50%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: '12px',
+            color: 'white',
+          }}
+        >
+          📋
+        </div>
+        <h3
+          style={{
+            margin: '0',
+            fontSize: '16px',
+            fontWeight: '600',
+            color: '#333',
+          }}
+        >
+          Saving to Raindrop
+        </h3>
+      </div>
 
-      <ul style={{ paddingInlineStart: '0' }}>
+      <div
+        style={{
+          maxHeight: '300px',
+          overflowY: 'auto',
+          paddingRight: '4px',
+        }}
+      >
         {tabIds.map(tabId => (
           <ListItem key={tabId} tabId={tabId} />
         ))}
-      </ul>
+      </div>
     </div>
   );
 }
@@ -95,16 +149,73 @@ const ListItem: React.FC<{ tabId: TabId }> = ({ tabId }) => {
   if (tab == null) return null;
 
   return (
-    <li
+    <div
       style={{
-        listStyle: 'none',
-        whiteSpace: 'nowrap',
-        overflow: 'hidden',
-        textOverflow: 'ellipsis',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '12px',
+        padding: '8px 12px',
+        marginBottom: '4px',
+        borderRadius: '6px',
+        backgroundColor: (() => {
+          switch (status) {
+            case 'saved':
+              return '#f0f9f0';
+            case 'error':
+              return '#fdf2f2';
+            default:
+              return '#f8f9fa';
+          }
+        })(),
+        border: (() => {
+          switch (status) {
+            case 'saved':
+              return '1px solid #d4edda';
+            case 'error':
+              return '1px solid #f5c6cb';
+            default:
+              return '1px solid #e9ecef';
+          }
+        })(),
+        transition: 'all 0.2s ease',
       }}
       title={tab.title}
     >
-      {icon} {tab.title}
-    </li>
+      <div
+        style={{
+          fontSize: '16px',
+          minWidth: '20px',
+          display: 'flex',
+          justifyContent: 'center',
+        }}
+      >
+        {icon}
+      </div>
+      <div
+        style={{
+          flex: 1,
+          whiteSpace: 'nowrap',
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+          fontSize: '14px',
+          color: '#333',
+          lineHeight: '1.4',
+        }}
+      >
+        {tab.title}
+      </div>
+      {status === 'saving' && (
+        <div
+          style={{
+            width: '12px',
+            height: '12px',
+            border: '2px solid #e3e3e3',
+            borderTop: '2px solid #4285f4',
+            borderRadius: '50%',
+            animation: 'spin 1s linear infinite',
+          }}
+        />
+      )}
+    </div>
   );
 };
